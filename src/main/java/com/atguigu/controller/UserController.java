@@ -19,7 +19,7 @@ public class UserController {
 
     @PostMapping("login")
     public Result login(@Param("username") String username,@Param("userPwd") String userPwd){
-        String userPwd = MD5Util.encrypt(userPwd);
+        userPwd = MD5Util.encrypt(userPwd);
         User user = userService.findUserByName(username);
         if(user.getUserPwd() == userPwd){
             Result ok = Result.ok(null);
