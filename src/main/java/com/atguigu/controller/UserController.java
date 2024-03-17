@@ -8,6 +8,7 @@ import com.atguigu.utils.Result;
 import com.atguigu.utils.ResultCodeEnum;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("user")
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private JwtHelper jwtHelper;
 
     /**
      * 登录需求
@@ -25,15 +28,6 @@ public class UserController {
      *     "username":"zhangsan", //用户名
      *     "userPwd":"123456"     //明文密码
      *    }
-     * 返回:
-     *   {
-     *    "code":"200",         // 成功状态码
-     *    "message":"success"   // 成功状态描述
-     *    "data":{
-     *         "token":"... ..." // 用户id的token
-     *     }
-     *  }
-     *
      * 大概流程:
      *    1. 账号进行数据库查询 返回用户对象
      *    2. 对比用户密码(md5加密)
@@ -46,7 +40,6 @@ public class UserController {
         System.out.println("result = " + result);
         return result;
     }
-
 
     @GetMapping("getUserInfo")
     public Result getUserInfo(@RequestHeader String token){
@@ -66,5 +59,14 @@ public class UserController {
     public Result regist(@RequestBody User user){
         Result result = userService.regist(user);
         return result;
+    }
+
+    @GetMapping("checkLogin")
+    public Result checkLogin(@RequestHeader String token){
+        if (StringUtils.isEmpty(token) || jwtHelper.isExpiration(token)){
+            //没有传或者过期 未登录
+            return Result.build(null, ResultCodeEnum.NOTLOGIN);
+        }
+        return Result.ok(null);
     }
 }

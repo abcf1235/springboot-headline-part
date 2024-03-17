@@ -1,6 +1,7 @@
 package com.atguigu.service.impl;
 
 import com.atguigu.pojo.vo.PortalVo;
+import com.atguigu.utils.JwtHelper;
 import com.atguigu.utils.Result;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +30,8 @@ public class HeadlineServiceImpl extends ServiceImpl<HeadlineMapper, Headline>
 
     @Autowired
     private HeadlineMapper headlineMapper;
+    @Autowired
+    private JwtHelper jwtHelper;
 
     @Override
     public Result findNewsPage(PortalVo portalVo) {
@@ -71,6 +75,17 @@ public class HeadlineServiceImpl extends ServiceImpl<HeadlineMapper, Headline>
         Map<String,Object> pageInfoMap=new HashMap<>();
         pageInfoMap.put("headline",headlineDetail);
         return Result.ok(pageInfoMap);
+    }
+
+    @Override
+    public Result publish(Headline headline, String token) {
+        int userId = jwtHelper.getUserId(token).intValue();
+        headline.setPublisher(userId);
+        headline.setCreateTime(new Date());
+        headline.setUpdateTime(new Date());
+        headline.setPageViews(0);
+        headlineMapper.insert(headline);
+        return Result.ok(null);
     }
 }
 
