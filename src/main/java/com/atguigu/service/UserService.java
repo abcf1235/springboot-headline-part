@@ -1,6 +1,7 @@
 package com.atguigu.service;
 
 import com.atguigu.pojo.User;
+import com.atguigu.utils.Result;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -10,5 +11,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserService extends IService<User> {
 
-    User findUserByName(String username);
+    Result login(User user);
+
+    Result getUserInfo(String token);
+
+    Result checkUserName(String username);
+
+    Result regist(User user);
 }

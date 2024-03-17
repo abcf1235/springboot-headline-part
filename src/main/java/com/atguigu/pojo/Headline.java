@@ -12,6 +12,7 @@ import lombok.Data;
 //@TableName(value ="news_headline")  application.yaml统一配置了表前缀，所以不需要每一个类单独指定
 @Data
 public class Headline implements Serializable {
+    @TableId
     private Integer hid;
 
     private String title;

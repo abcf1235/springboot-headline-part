@@ -17,4 +17,6 @@
         uid,username,user_pwd,
         nick_name,version,is_deleted
     </sql>
+
+
 </mapper>
