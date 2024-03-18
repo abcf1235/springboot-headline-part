@@ -17,4 +17,10 @@ public interface HeadlineService extends IService<Headline> {
     Result showHeadlineDetail(Integer hid);
 
     Result publish(Headline headline, String token);
+
+    Result findHeadlineByHid(Integer hid);
+
+    Result updateHeadline(Headline headline);
+
+    Result removeByHid(Integer hid);
 }

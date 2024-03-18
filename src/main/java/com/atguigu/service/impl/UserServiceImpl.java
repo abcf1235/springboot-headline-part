@@ -43,7 +43,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             if(!StringUtils.isEmpty(user.getUserPwd())
                     && loginUser.getUserPwd().equals(MD5Util.encrypt(user.getUserPwd()))){
                 String token = jwtHelper.createToken(Long.valueOf(loginUser.getUid()));
-                return Result.ok(token);
+                Map data = new HashMap();
+                data.put("token",token);
+                return Result.ok(data);
             }
             return Result.build(null, ResultCodeEnum.PASSWORD_ERROR);
         }

@@ -87,6 +87,39 @@ public class HeadlineServiceImpl extends ServiceImpl<HeadlineMapper, Headline>
         headlineMapper.insert(headline);
         return Result.ok(null);
     }
+
+    @Override
+    public Result findHeadlineByHid(Integer hid) {
+        Headline headline = headlineMapper.selectById(hid);
+        Map data = new HashMap();
+        data.put("headline",headline);
+        return Result.ok(data);
+    }
+
+    /**
+     * 修改业务
+     * 1.查询version版本
+     * 2.补全属性,修改时间 , 版本!
+     *
+     * @param headline
+     * @return
+     */
+    @Override
+    public Result updateHeadline(Headline headline) {
+        Integer version = headlineMapper.selectById(headline.getHid()).getVersion();
+
+        headline.setVersion(version);
+        headline.setUpdateTime(new Date());
+
+        headlineMapper.updateById(headline);
+        return Result.ok(null);
+    }
+
+    @Override
+    public Result removeByHid(Integer hid) {
+        headlineMapper.deleteById(hid);
+        return Result.ok(null);
+    }
 }
 
 
